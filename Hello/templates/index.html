@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title%} Home
+{% endblock title%}
+
+{% block body%}
+<div class="container my-4">
+    <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="static/back1.png" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="static/back1.png" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="static/back1.png" class="d-block w-100" alt="...">
+          </div>
+        </div> 
+      </div>
+</div>
+<h2>Log In</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Log In</button>
+</form>
+{% if user.is_authenticated %}
+Hi {{ user.username }}!
+<p><a href="{% url 'logout' %}">Log Out</a></p>
+{% else %}
+<p>You are not logged in</p>
+<a href="{% url 'login' %}">Log In</a>
+{% endif %}
+{% endblock body%}
