@@ -1,4 +1,6 @@
 from django.shortcuts import render , HttpResponse
+from home.models import Problem, Solution
+from django.contrib import messages
 
 # Create your views here.
 def index(request):
@@ -18,4 +20,10 @@ def contact(request):
     return render(request, 'contact.html')
 def home(request):
      return render(request, 'home.html')
+
+def submit(request):
+    return render(request,'submit_sol.html')
+def probleminfo(request):
+    prob =Problem.objects.all()
+    return render(request,'problemdetails1.html',{'pro':prob})
 
