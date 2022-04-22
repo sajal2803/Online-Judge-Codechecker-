@@ -11,6 +11,7 @@ class Problem(models.Model):
     prob_link=models.FilePathField(path=BASE_DIR/'static')
     test_input=models.FilePathField(path=BASE_DIR/'TEST-INPUT')
     test_output=models.FilePathField(path=BASE_DIR/'TEST-OUTPUT')
+    editorial=models.CharField(default='#',max_length=100)
 
 
 class Solution(models.Model):
@@ -19,4 +20,17 @@ class Solution(models.Model):
     sol_link=models.ForeignKey(User,on_delete=models.DO_NOTHING)  #doubt
     test_input=models.FilePathField(path=BASE_DIR/'TEST-INPUT')
     test_output=models.FilePathField(path=BASE_DIR/'TEST-OUTPUT') #doubt_generated_file?
-    user_id=models.IntegerField()
+    vis_id=models.IntegerField()
+
+class Visitor(models.Model):
+    vis_name=models.CharField(max_length=100)
+    vis_email = models.CharField(max_length=100)
+    vis_password= models.CharField(max_length=100)
+    #vis_last_login=models.TimeField(default =None)
+    vis_problem_attempted=models.IntegerField(default=0)
+    vis_problem_solved=models.IntegerField(default=0) #attempted
+    vis_problem_list =models.CharField(max_length=500) #name of problems solved by user
+
+
+
+
