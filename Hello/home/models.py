@@ -4,33 +4,43 @@ from django.contrib.auth.models import User
 import os
 
 
+class Visitor(models.Model):
+    username= models.CharField(primary_key=True , max_length= 100)
+    name= models.CharField(max_length=100)
+    email = models.CharField(unique=True,max_length=100)
+    password = models.CharField(max_length=100)
+    problem_solved= models.IntegerField(default=0)
+
+    def __str__(self) -> str:
+        return self.name
 
 class Problem(models.Model):
-    prob_id=models.IntegerField(primary_key=True)
-    prob_name=models.CharField(max_length=100)
-    prob_link=models.FilePathField(path=BASE_DIR/'static')
-    test_input=models.FilePathField(path=BASE_DIR/'TEST-INPUT')
-    test_output=models.FilePathField(path=BASE_DIR/'TEST-OUTPUT')
-    editorial=models.CharField(default='#',max_length=100)
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length= 100)
+    type = models.CharField(max_length= 100)
+    difficulty = models.CharField(max_length= 100)
+    statement=models.TextField()
+    task=models.TextField(null=True)
+    time_complexity=models.CharField(max_length=50,null =True)
+    space_complexity=models.CharField(max_length=50,null =True)
+    constraints=models.CharField(max_length=50,null =True)
+    example=models.TextField(null =True)
 
+    def __str__(self) -> str:
+        return self.name
 
-class Solution(models.Model):
-    sol_id=models.IntegerField(primary_key=True)
-    prob_id=models.ForeignKey(Problem,on_delete=models.DO_NOTHING)
-    sol_link=models.ForeignKey(User,on_delete=models.DO_NOTHING)  #doubt
-    test_input=models.FilePathField(path=BASE_DIR/'TEST-INPUT')
-    test_output=models.FilePathField(path=BASE_DIR/'TEST-OUTPUT') #doubt_generated_file?
-    vis_id=models.IntegerField()
+class Submission(models.Model):
+    visitor = models.ForeignKey(Visitor,on_delete=models.CASCADE)
+    problem = models.ForeignKey(Problem,on_delete=models.CASCADE)
+    verdict = models.CharField(max_length=100)
+    time =models.DateTimeField()
 
-class Visitor(models.Model):
-    vis_name=models.CharField(max_length=100)
-    vis_email = models.CharField(max_length=100)
-    vis_password= models.CharField(max_length=100)
-    #vis_last_login=models.TimeField(default =None)
-    vis_problem_attempted=models.IntegerField(default=0)
-    vis_problem_solved=models.IntegerField(default=0) #attempted
-    vis_problem_list =models.CharField(max_length=500) #name of problems solved by user
+class TestCases(models.Model):
+    input = models.TextField()
+    output = models.TextField()
+    problem = models.ForeignKey(Problem,on_delete=models.CASCADE,null=True)
 
-
+    
+    
 
 
