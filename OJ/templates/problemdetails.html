@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title%} Document
+{% endblock title%}
+
+{% block body%}
+
+<h1>Problem Page</h1>  
+  
+  <h2> {{vis.username}}</h2>
+  
+  <div class="list-group">
+    <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+      The current link item
+    </a>
+     
+    </br>
+      {% for p in pro %}
+      
+      <a href= "{{p.id}}/" class="list-group-item list-group-item-action">{{p.name}}</a>
+      </br></br>
+      {% endfor %}
+      
+      
+    </div>
+   
+{% endblock body%}
+
+  
+
+    
+    
+    
+  

@@ -1,0 +1,41 @@
+
+{% extends "base.html" %}
+
+{% block title%} problem-description
+{% endblock title%}
+{% block body%}
+     <p>{{user.username}}</p>
+    
+      
+        <p> {{ID.id}} dnfidv</p>
+         <p>{{ID.name}}</p>
+    
+         <p>{{ID.type}}</p>
+         
+         <p>{{ID.difficulty}}</p>
+         
+         <p>{{ID.statement}}</p>
+         
+         <p>{{ID.task}}</p>
+         
+         <p>{{ID.time_complexity}}</p>
+         
+         <p>{{ID.space_complexity}}</p>
+         
+         <p>{{ID.constraints}}</p>
+         
+         <p>{{ID.example}}</p>         
+         
+         <form method ='POST' action="/submit/{{user.username}}/{{ID.id}}">
+            <label for="code">Write your code here:</label>
+            <textarea id="usercode" name="usercode" style="width: 970px; height=1000px;">
+           
+                </textarea>
+            
+            <input type="submit" value="Submit">
+            
+          </form>
+    
+    
+
+{% endblock body%}
