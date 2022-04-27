@@ -1,6 +1,6 @@
 from asyncio.windows_events import NULL
 from django.shortcuts import render, redirect
-
+from subprocess import call
 from django.contrib import messages
 
 from django.contrib.auth import authenticate, login, logout
@@ -96,6 +96,14 @@ def problem_description(request,username,prob_id):
     #rank = Visitor.objects.all().filter(problems_solved__gt=user.problems_solved).count() + 1
     return render(request,'problem_description.html',{'ID':id,'user':user})
 
+class Callpy(object):
+     def __init__(self,path):
+         self.path=path
+
+     def call_python_file(self):
+         print("{}".format(self.path))
+         call(["Python3","{}".format(self.path)])
+
 def submit(request, username, prob_id):
     if request.method == "POST":
        username = username
@@ -105,3 +113,9 @@ def submit(request, username, prob_id):
        textfile = open("solution.py", "w")
        textfile.write(code)
        textfile.close()
+      
+       c=Callpy('C:\\Users\\91917\\new-django-project\\OJ\\solution.py')
+       c.call_python_file()
+       
+       return render(request,'contact.html')
+    else: return render(request,'home.html')

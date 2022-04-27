@@ -26,7 +26,8 @@
          
          <p>{{ID.example}}</p>         
          
-         <form method ='POST' action="/submit/{{user.username}}/{{ID.id}}">
+         <form method ='POST' action="/submit/{{user.username}}/{{ID.id}}/">
+              {% csrf_token %}
             <label for="code">Write your code here:</label>
             <textarea id="usercode" name="usercode" style="width: 970px; height=1000px;">
            
