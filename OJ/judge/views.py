@@ -2,10 +2,11 @@ from asyncio.windows_events import NULL
 from django.shortcuts import render, redirect
 from subprocess import call
 from django.contrib import messages
-
+from subprocess import Popen, PIPE
 from django.contrib.auth import authenticate, login, logout
-
-from judge.models import Problem, Visitor ,Submission
+import os
+import subprocess
+from judge.models import Problem, TestCases, Visitor ,Submission
 
 # Create your views here.
 def index(request):
@@ -101,21 +102,56 @@ class Callpy(object):
          self.path=path
 
      def call_python_file(self):
-         print("{}".format(self.path))
+        
          call(["Python3","{}".format(self.path)])
 
 def submit(request, username, prob_id):
+
     if request.method == "POST":
+       errors=""
+       output_list= []
        username = username
        prob_id = prob_id
        code = request.POST['usercode']
        code =str(code)
-       textfile = open("solution.py", "w")
+       textfile = open("static/solution.cpp", "w")
        textfile.write(code)
+       answer_list=[]
        textfile.close()
-      
-       c=Callpy('C:\\Users\\91917\\new-django-project\\OJ\\solution.py')
-       c.call_python_file()
-       
+       problem = Problem.objects.get(id=prob_id)
+       testcase = TestCases.objects.get(problem=problem)
+       with open(testcase.output,"r") as f:
+           output =f.read()
+       output_lines = output.split("\n")
+       for l in output_lines:
+           answer_list.append(l)
+       with open(testcase.input,"r") as f:
+           input =f.read()
+       lines = input.split("\n")
+       try:
+           output = subprocess.check_output("g++ solution.cpp -o out2", shell = True,cwd="static", stderr=subprocess.STDOUT)
+           for line in lines:
+              data, temp =os.pipe()
+              os.write(temp,bytes(line,"utf-8"));
+              os.close(temp)
+              p = subprocess.check_output('out2', timeout=5.5, stdin = data,cwd="static",shell=True, stderr=subprocess.PIPE)
+              output_list.append(p.decode("utf-8"))
+           if answer_list==output_list:
+               print("Hurry Correct answer")
+           print(output_list)
+       except subprocess.CalledProcessError as e:
+             errors=e.output.decode()
+       except subprocess.TimeoutExpired as e:
+             errors=e.output.decode()
+       except Exception as e:
+            # check_call can raise other exceptions, such as FileNotFoundError
+             errors=str(e)
+       print(errors)
        return render(request,'contact.html')
+    
     else: return render(request,'home.html')
+
+     
+      
+    
+
